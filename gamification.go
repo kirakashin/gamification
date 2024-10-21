@@ -102,3 +102,31 @@ func (c *GameConnection) SendAnswerQuestionRejectedEvent(viewerID, chatRoomUUID 
 
 	return
 }
+
+func (c *GameConnection) SendPollVoteEvent(viewerID string, hallID uint, payload interface{}) (err error) {
+	activityID, streamUUID, err := c.EventorService.TranslateHallIDToActivity(hallID)
+	if err != nil {
+		return
+	}
+
+	err = c.StatisticsService.FireEvent(viewerID, activityID, streamUUID, types.EVENT_TYPE_POLL_VOTE, payload)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (c *GameConnection) SendCorrectPollVoteEvent(viewerID string, hallID uint, payload interface{}) (err error) {
+	activityID, streamUUID, err := c.EventorService.TranslateHallIDToActivity(hallID)
+	if err != nil {
+		return
+	}
+
+	err = c.StatisticsService.FireEvent(viewerID, activityID, streamUUID, types.EVENT_TYPE_CORRECT_POLL_VOTE, payload)
+	if err != nil {
+		return
+	}
+
+	return
+}

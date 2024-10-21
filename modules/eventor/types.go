@@ -8,3 +8,7 @@ type Activity struct {
 		} `json:"stream"`
 	} `json:"halls"`
 }
+
+type Hall struct {
+	ActivityID uint `json:"activityID"`
+}

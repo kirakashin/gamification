@@ -26,21 +26,21 @@ func main() {
 
 	conn, _ := gamification.InitConnection(*statisticsURL, *eventorURL, *eventorToken)
 
-	err = conn.SendMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test"})
+	err = conn.SendMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test SendMessageEvent"})
 	fmt.Printf("err: %v\n", err)
 
-	err = conn.SendRejectMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test"})
+	err = conn.SendRejectMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test SendRejectMessageEvent"})
 	fmt.Printf("err: %v\n", err)
 
-	err = conn.SendLikeMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test"})
+	err = conn.SendLikeMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test SendLikeMessageEvent"})
 	fmt.Printf("err: %v\n", err)
 
-	err = conn.SendDislikeMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test"})
+	err = conn.SendDislikeMessageEvent(*viewerID, *chatUUID, map[string]string{"message": "test SendDislikeMessageEvent"})
 	fmt.Printf("err: %v\n", err)
 
-	err = conn.SendAnswerQuestionEvent(*viewerID, *chatUUID, map[string]string{"message": "test"})
+	err = conn.SendAnswerQuestionEvent(*viewerID, *chatUUID, map[string]string{"message": "test SendAnswerQuestionEvent"})
 	fmt.Printf("err: %v\n", err)
 
-	err = conn.SendAnswerQuestionRejectedEvent(*viewerID, *chatUUID, map[string]string{"message": "test"})
+	err = conn.SendAnswerQuestionRejectedEvent(*viewerID, *chatUUID, map[string]string{"message": "test SendAnswerQuestionRejectedEvent"})
 	fmt.Printf("err: %v\n", err)
 }
