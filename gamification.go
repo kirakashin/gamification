@@ -74,3 +74,31 @@ func (c *GameConnection) SendDislikeMessageEvent(viewerID, chatRoomUUID string, 
 
 	return
 }
+
+func (c *GameConnection) SendAnswerQuestionEvent(viewerID, chatRoomUUID string, payload interface{}) (err error) {
+	activityID, streamUUID, err := c.EventorService.TranslateChatToActivity(chatRoomUUID)
+	if err != nil {
+		return
+	}
+
+	err = c.StatisticsService.FireEvent(viewerID, activityID, streamUUID, types.EVENT_TYPE_ANSWER_QUESTION, payload)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (c *GameConnection) SendAnswerQuestionRejectedEvent(viewerID, chatRoomUUID string, payload interface{}) (err error) {
+	activityID, streamUUID, err := c.EventorService.TranslateChatToActivity(chatRoomUUID)
+	if err != nil {
+		return
+	}
+
+	err = c.StatisticsService.FireEvent(viewerID, activityID, streamUUID, types.EVENT_TYPE_ANSWER_QUESTION_REJECTED, payload)
+	if err != nil {
+		return
+	}
+
+	return
+}

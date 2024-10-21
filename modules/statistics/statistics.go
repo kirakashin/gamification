@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/kirakashin/gamification/types"
 )
@@ -46,17 +45,15 @@ func InitService(url string) (ss StatisticsService, err error) {
 // }
 
 func (ss *StatisticsService) FireEvent(viewerID, activityID, streamUUID string, eventType types.EventType, payload interface{}) error {
-	fullURL, _ := url.JoinPath(ss.URL, FIRE_EVENT_PATH)
-
-	fullURL = fmt.Sprintf(fullURL, streamUUID)
+	fullURL := fmt.Sprintf(ss.URL+FIRE_EVENT_PATH, streamUUID)
 
 	req := FireEventReq{
 		ActivityID: activityID,
 		StreamUUID: streamUUID,
-		UniqueUUID: streamUUID,
-		ViewerID:   viewerID,
-		Type:       eventType,
-		Data:       payload,
+		// UniqueUUID: streamUUID,
+		ViewerID: viewerID,
+		Type:     eventType,
+		Data:     payload,
 	}
 
 	b, err := json.Marshal(req)
@@ -64,10 +61,23 @@ func (ss *StatisticsService) FireEvent(viewerID, activityID, streamUUID string, 
 		return err
 	}
 
-	resp, err := http.Post(fullURL, "application/json", bytes.NewReader(b))
+	client := &http.Client{}
+
+	r, err := http.NewRequest(http.MethodPut, fullURL, bytes.NewReader(b))
 	if err != nil {
 		return err
 	}
+
+	resp, err := client.Do(r)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// b, err = io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	return err
+	// }
 
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("INTERNAL ERROR")

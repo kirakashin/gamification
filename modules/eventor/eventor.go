@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"time"
 
 	"github.com/kirakashin/gamification/cache"
@@ -72,9 +71,7 @@ func (es *EventorService) TranslateChatToActivity(chatRoomUUID string) (string, 
 }
 
 func (es *EventorService) GetActivityByChat(chatRoomUUID string) (*Activity, error) {
-	fullURL, _ := url.JoinPath(es.URL, ACTIVITY_BY_CHAT_PATH)
-
-	fullURL = fmt.Sprintf(fullURL, chatRoomUUID, es.Token)
+	fullURL := fmt.Sprintf(es.URL+ACTIVITY_BY_CHAT_PATH, chatRoomUUID, es.Token)
 
 	resp, err := http.Get(fullURL)
 	if err != nil {
@@ -90,11 +87,14 @@ func (es *EventorService) GetActivityByChat(chatRoomUUID string) (*Activity, err
 		return nil, err
 	}
 
-	var activity Activity
+	var activity struct {
+		Activity Activity `json:"activity"`
+	}
+
 	err = json.Unmarshal(b, &activity)
 	if err != nil {
 		return nil, err
 	}
 
-	return &activity, nil
+	return &activity.Activity, nil
 }
